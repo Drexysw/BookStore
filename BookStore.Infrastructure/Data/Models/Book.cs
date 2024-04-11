@@ -22,7 +22,7 @@ namespace BookStore.Infrastructure.Data.Models
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        [Comment("Price of the book")]
+        [Comment("Price of the book")]  
         [Precision(18, 2)]
         public decimal Price { get; set; }
 
