@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace OnlineBookstoreManagementSystem.Infrastructure.Data.Models
+namespace BookStore.Infrastructure.Data.Models
 {
     public class ApplicationUser : IdentityUser<string>
     {

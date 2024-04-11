@@ -3,7 +3,7 @@ using BookStore.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace OnlineBookstoreManagementSystem.Infrastructure.Data.SeedDb
+namespace BookStore.Infrastructure.Data.SeedDb
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

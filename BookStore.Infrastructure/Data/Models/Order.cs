@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using OnlineBookstoreManagementSystem.Infrastructure.Data.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookStore.Infrastructure.Data.Models
 {

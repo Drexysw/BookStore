@@ -1,9 +1,8 @@
 ﻿using BookStore.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OnlineBookstoreManagementSystem.Infrastructure.Data.Models;
 
-namespace OnlineBookstoreManagementSystem.Infrastructure.Data.SeedDb
+namespace BookStore.Infrastructure.Data.SeedDb
 {
     public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {

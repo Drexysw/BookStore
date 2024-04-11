@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OnlineBookstoreManagementSystem.Infrastructure.Data.Models;
+using BookStore.Infrastructure.Data.Models;
 
-namespace OnlineBookstoreManagementSystem.Infrastructure.Data.SeedDb
+namespace BookStore.Infrastructure.Data.SeedDb
 {
     public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
