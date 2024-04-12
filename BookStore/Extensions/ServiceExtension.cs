@@ -6,7 +6,6 @@ using BookStore.Infrastructure.Common;
 using BookStore.Infrastructure.Data;
 using BookStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.Extension.DependencyInjection
@@ -17,6 +16,7 @@ namespace Microsoft.Extension.DependencyInjection
         {
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISellerService, SellerService>();
             return services;
         }
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)

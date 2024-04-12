@@ -1,4 +1,5 @@
-﻿using BookStore.Core.Models.Book;
+﻿using BookStore.Core.Models.Author;
+using BookStore.Core.Models.Book;
 using BookStore.Core.Models.Category;
 using OnlineBookstoreManagementSystem.Core.Models.Book;
 
@@ -21,5 +22,7 @@ namespace BookStore.Core.Contracts
         public Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id);
 
         public Task<int> CreateAsync(BookFormModel model, int sellerId);
+        public Task<bool> CategoryExist(int id);
+        public Task<IEnumerable<BookAuthorServiceModel>> AuthorListAsync();
     }
 }

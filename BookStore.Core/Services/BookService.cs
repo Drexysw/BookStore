@@ -1,8 +1,10 @@
 ﻿using BookStore.Core.Contracts;
+using BookStore.Core.Models.Author;
 using BookStore.Core.Models.Book;
 using BookStore.Core.Models.Category;
 using BookStore.Infrastructure.Common;
 using BookStore.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,15 +14,15 @@ namespace BookStore.Core.Services
 {
     public class BookService : IBookService
     {
-        private IRepository repository;
-        private ILogger logger;
+        private readonly IRepository repository;
+        private readonly ILogger<BookService> logger;
 
         public BookService(IRepository _repository, ILogger<BookService> _logger)
         {
             repository = _repository;
-            this.logger = _logger;
+            logger = _logger;
         }
-
+        
         public async Task<BookQueryServiceModel> AllAsync([FromQuery] string? category = null,
             string? searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
@@ -97,6 +99,17 @@ namespace BookStore.Core.Services
                .ToListAsync();
         }
 
+        public async Task<IEnumerable<BookAuthorServiceModel>> AuthorListAsync()
+        {
+            return await repository.AllReadOnly<Author>()
+                .Select(Author => new BookAuthorServiceModel()
+                {
+                    Id = Author.Id,
+                    Name = Author.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id)
         {
             return await repository.AllReadOnly<Book>()
@@ -115,6 +128,12 @@ namespace BookStore.Core.Services
                  .FirstAsync();
         }
 
+        public async Task<bool> CategoryExist(int id)
+        {
+            return await repository.AllReadOnly<Category>()
+                .AnyAsync(c => c.Id == id);
+        }
+
         public async Task<int> CreateAsync(BookFormModel model, int sellerId)
         {
             var book = new Book()
@@ -122,9 +141,10 @@ namespace BookStore.Core.Services
                 Title = model.Title,
                 Description = model.Description,
                 ImageUrl = model.ImageUrl,
-                SellerId = model.SellerId,
+                SellerId = sellerId,
                 Price = model.Price,
-                CategoryId = model.CategoryId
+                CategoryId = model.CategoryId,
+                AuthorId = model.AuthorId,
             };
             try
             {
@@ -133,6 +153,7 @@ namespace BookStore.Core.Services
             }
             catch (Exception ex)
             {
+                logger.LogError(nameof(CreateAsync), ex);
                 throw new ApplicationException("Database failed to save info", ex);
             }
             return book.Id;
@@ -158,5 +179,6 @@ namespace BookStore.Core.Services
                  })
                  .ToListAsync();
         }
+
     }
 }
