@@ -6,6 +6,7 @@ using BookStore.Infrastructure.Common;
 using BookStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlineBookstoreManagementSystem.Core.Models.Book;
@@ -48,7 +49,7 @@ namespace BookStore.Core.Services
                 BookSorting.Price => booksToShow.OrderBy(b => b.Price)
                                                 .ThenBy(b => b.Title),
                 BookSorting.NotBoughtFirst => booksToShow.OrderBy(b => b.BuyerId),
-                _ => booksToShow.OrderBy(b => b.Id)
+                _ => booksToShow.OrderByDescending(b => b.Id)
             };
             result.Books = await booksToShow
                .Skip((currentPage - 1) * booksperpage)
@@ -145,7 +146,6 @@ namespace BookStore.Core.Services
             }
             catch (Exception ex)
             {
-                logger.LogError(nameof(CreateAsync), ex);
                 throw new ApplicationException("Database failed to save info", ex);
             }
             return book.Id;
@@ -176,6 +176,79 @@ namespace BookStore.Core.Services
         {
             return await repository.AllReadOnly<Category>()
                 .AnyAsync(c => c.Id == id);
+        }
+
+        public async Task<bool> IsBought(int id)
+        {
+            return (await repository.GetByIdAsync<Book>(id)).BuyerId != null;
+        }
+
+        public async Task<bool> IsBoughtByUserWithId(int houseId, string currentUserId)
+        {
+            bool result = false;
+            var house = await repository.AllReadOnly<Book>()
+                .Where(h => h.Id == houseId)
+                .Where(h => h.IsAvailable)
+                .FirstOrDefaultAsync();
+            if (house != null && house.BuyerId == currentUserId)
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        public async Task Rent(int houseId, string currentUserId)
+        {
+            var book = await repository.GetByIdAsync<Book>(houseId);
+            if (book != null && book.BuyerId == null)
+            {
+                book.BuyerId = currentUserId;
+                await repository.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("This book is already bought");
+            }
+        }
+
+        public async Task<IEnumerable<BookDetailsServiceModel>> AllBooksByUserIdAsync(string userId)
+        {
+            return await repository.AllReadOnly<Book>()
+                .Where(b => b.BuyerId == userId)
+                .Where(b => b.IsAvailable)
+                .Select(b => new BookDetailsServiceModel()
+                { 
+                    Id = b.Id,
+                    Title = b.Title,
+                    ImageUrl = b.ImageUrl,
+                    Price = b.Price,
+                    Author = b.Author.Name,
+                    Category = b.Category.Name,
+                    Description = b.Description,
+                    IsAvailable = b.BuyerId != null
+                })
+                .ToListAsync();
+
+
+        }
+
+        public async Task<IEnumerable<BookDetailsServiceModel>> AllBooksBySellerId(int sellerId)
+        {
+            return await repository.AllReadOnly<Book>()
+               .Where(b => b.SellerId == sellerId)
+               .Where(b => b.IsAvailable)
+               .Select(b => new BookDetailsServiceModel()
+               {
+                   Id = b.Id,
+                   Title = b.Title,
+                   ImageUrl = b.ImageUrl,
+                   Price = b.Price,
+                   Author = b.Author.Name,
+                   Category = b.Category.Name,
+                   Description = b.Description,
+                   IsAvailable = b.BuyerId != null
+               })
+               .ToListAsync();
         }
     }
 }

@@ -34,7 +34,7 @@ namespace BookStore.Controllers
                 query.CurrentPage,
                 AllBooksQueryModel.BooksPerPage);
 
-            query.TotalBoardGamesCount = result.TotalBooksCount;
+            query.TotalBooksCount = result.TotalBooksCount;
             query.Categories = await bookService.AllCategoriesNameAsync();
             query.Books = result.Books;
 
@@ -70,7 +70,7 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(BookFormModel model)
         {
-             if (await sellerService.ExistsById(User.Id()) == false)
+            if (await sellerService.ExistsById(User.Id()) == false)
             {
                 return RedirectToAction(nameof(SellerController.Become), "seller");
             }
@@ -78,18 +78,61 @@ namespace BookStore.Controllers
             {
                 ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist");
             }
-            if(await bookService.AuthorExist(model.Author) == false)
+            if (await bookService.AuthorExist(model.Author) == false)
             {
                 RedirectToAction(nameof(AuthorController.Create), "Author");
             }
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 model.Categories = await bookService.AllCategoriesAsync();
                 return View(model);
             }
             int sellerId = await sellerService.GetSellerId(User.Id());
             int id = await bookService.CreateAsync(model, sellerId);
-            return RedirectToAction(nameof(Details), new  { id = id});
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Buy(int id)
+        {
+            if (await bookService.ExistByIdAsync(id) == false)
+            {
+                return RedirectToAction(nameof(All));
+            }
+            /*
+            if (!User.IsInRole(AdminRolleName) && await sellerService.ExistsById(User.Id()))
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+            */
+            if (await bookService.IsBought(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+            await bookService.Rent(id, User.Id());
+            return RedirectToAction(nameof(Mine));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            /*
+            if (User.IsInRole(AdminRolleName))
+            {
+                return RedirectToAction("Mine", "House", new { area = AreaName });
+            }
+            */
+            IEnumerable<BookDetailsServiceModel> myBooks;
+            var userId = User.Id();
+            if (await sellerService.ExistsById(userId))
+            {
+                int sellerId = await sellerService.GetSellerId(userId);
+                myBooks = await bookService.AllBooksBySellerId(sellerId);
+            }
+            else
+            {
+                myBooks = await bookService.AllBooksByUserIdAsync(userId);
+            }
+            return View(myBooks);
+
         }
     }
 }

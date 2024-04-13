@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookStore.Core.Models.Book;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,7 @@ namespace BookStore.Core.Contracts
         Task Create(string userId, string phoneNumber);
 
         Task<int> GetSellerId(string userId);
+
+        
     }
 }

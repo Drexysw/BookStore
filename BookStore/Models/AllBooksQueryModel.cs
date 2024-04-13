@@ -16,7 +16,7 @@ namespace BookStore.Core.Models.Book
 
         public int CurrentPage { get; set; } = 1;
 
-        public int TotalBoardGamesCount { get; set; }
+        public int TotalBooksCount { get; set; }
 
         public IEnumerable<string> Categories { get; set; } = Enumerable.Empty<string>();
 

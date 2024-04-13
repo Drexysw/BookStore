@@ -1,4 +1,5 @@
 ﻿using BookStore.Core.Contracts;
+using BookStore.Core.Models.Book;
 using BookStore.Infrastructure.Common;
 using BookStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Routing;
@@ -13,6 +14,9 @@ namespace BookStore.Core.Services
         {
             repository = _repository;
         }
+
+        
+
         public async  Task Create(string userId, string name)
         {
             var seller = new Seller()

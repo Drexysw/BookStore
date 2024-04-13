@@ -35,9 +35,9 @@ namespace BookStore.Infrastructure.Common
             await context.SaveChangesAsync();
         }
 
-        public Task<T> GetByIdAsync<T>(object id) where T : class
+        public async Task<T> GetByIdAsync<T>(object id) where T : class
         {
-            throw new NotImplementedException();
+            return await DbSet<T>().FindAsync(id);
         }
 
         public Task<T> GetByIdsAsync<T>(object[] id) where T : class

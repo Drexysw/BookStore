@@ -25,5 +25,14 @@ namespace BookStore.Core.Contracts
         public Task<bool> AuthorExist(string name);
 
         public Task<bool> CategoryExist(int id);
+
+        public Task<bool> IsBought(int id);
+
+        Task<bool> IsBoughtByUserWithId(int houseId, string currentUserId);
+
+        public Task Rent(int houseId, string currentUserId);
+
+        public Task<IEnumerable<BookDetailsServiceModel>> AllBooksByUserIdAsync(string userId);
+        Task<IEnumerable<BookDetailsServiceModel>> AllBooksBySellerId(int sellerId);
     }
 }
