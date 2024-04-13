@@ -92,6 +92,7 @@ namespace BookStore.Areas.Identity.Pages.Account
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
+
             }
 
             returnUrl ??= Url.Content("~/");

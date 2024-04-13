@@ -7,7 +7,9 @@ namespace BookStore.Infrastructure.Data.Configuration
     {
         public ApplicationUser AdminUser { get; set; } = new ApplicationUser();
         public ApplicationUser GuestUser { get; set; } = new ApplicationUser();
+        public ApplicationUser Admin2User { get; set; } = new ApplicationUser();
         public Seller Seller { get; set; } = new Seller();
+        public Seller AdminSeller { get; set; } = new Seller();
         public Category NovelCategory { get; set; } = new Category();
         public Category PsychologyCategory { get; set; } = new Category();
         public Category ThrillerCategory { get; set; } = new Category();
@@ -35,7 +37,8 @@ namespace BookStore.Infrastructure.Data.Configuration
                 UserName = "seller@gmail.com",
                 NormalizedUserName = "seller@gmail.com",
                 Email = "seller@gmail.com",
-                NormalizedEmail = "admin@gmail.com"
+                NormalizedEmail = "admin@gmail.com",
+                SecurityStamp = "2898835f-2cd7-4981-9394-5370ced1da30"
             };
             AdminUser.PasswordHash = hasher.HashPassword(AdminUser, "admin123");
 
@@ -48,6 +51,19 @@ namespace BookStore.Infrastructure.Data.Configuration
                 NormalizedEmail = "guestuser@gmail.com"
             };
             GuestUser.PasswordHash = hasher.HashPassword(GuestUser, "guest123");
+
+            Admin2User = new ApplicationUser()
+            {
+                Id = "bff69dcd-47cd-452a-8536-4823df1b2e70",
+                UserName = "admin@gmail.com",
+                NormalizedUserName = "ADMIN@GMAIL.COM",
+                Email = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
+                FirstName = "Stamo",
+                LastName = "Petkov",
+                SecurityStamp = "2e3112b8-6559-4e6f-a6ce-ee9595405798"
+            };
+            Admin2User.PasswordHash = hasher.HashPassword(Admin2User, "admin2123");
         }
 
         private void SeedSellers()
@@ -58,6 +74,13 @@ namespace BookStore.Infrastructure.Data.Configuration
                 Name = "John",
                 Rating = 5.5,
                 UserId = AdminUser.Id,
+            };
+            AdminSeller = new Seller()
+            {
+                Id = 2,
+                Name = "Stamo",
+                Rating = 6,
+                UserId = Admin2User.Id,
             };
         }
 

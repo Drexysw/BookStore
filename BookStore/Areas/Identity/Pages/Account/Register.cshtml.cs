@@ -100,6 +100,7 @@ namespace BookStore.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
             [Required]
             public string FirstName { get; set; }
+            [Required]
             public string LastName { get; set; }
         }
 
@@ -108,6 +109,7 @@ namespace BookStore.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -121,6 +123,8 @@ namespace BookStore.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.Id = Guid.NewGuid().ToString();
+                user.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -155,7 +159,7 @@ namespace BookStore.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // If we got this far, something failed, redisplay form 
             return Page();
         }
 

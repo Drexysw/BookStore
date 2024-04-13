@@ -10,17 +10,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlineBookstoreManagementSystem.Core.Models.Book;
 using System.Linq;
+using System.Runtime.CompilerServices;
 namespace BookStore.Core.Services
 {
     public class BookService : IBookService
     {
         private readonly IRepository repository;
         private readonly ILogger<BookService> logger;
-
-        public BookService(IRepository _repository, ILogger<BookService> _logger)
+        private readonly IAuthorService authorService;
+        public BookService(IRepository _repository, ILogger<BookService> _logger, IAuthorService _authorService)
         {
             repository = _repository;
             logger = _logger;
+            authorService = _authorService;
         }
         
         public async Task<BookQueryServiceModel> AllAsync([FromQuery] string? category = null,
@@ -99,16 +101,6 @@ namespace BookStore.Core.Services
                .ToListAsync();
         }
 
-        public async Task<IEnumerable<BookAuthorServiceModel>> AuthorListAsync()
-        {
-            return await repository.AllReadOnly<Author>()
-                .Select(Author => new BookAuthorServiceModel()
-                {
-                    Id = Author.Id,
-                    Name = Author.Name
-                })
-                .ToListAsync();
-        }
 
         public async Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id)
         {
@@ -128,10 +120,10 @@ namespace BookStore.Core.Services
                  .FirstAsync();
         }
 
-        public async Task<bool> CategoryExist(int id)
+        public async Task<bool> AuthorExist(string name)
         {
             return await repository.AllReadOnly<Category>()
-                .AnyAsync(c => c.Id == id);
+                .AnyAsync(c => c.Name == name);
         }
 
         public async Task<int> CreateAsync(BookFormModel model, int sellerId)
@@ -144,7 +136,7 @@ namespace BookStore.Core.Services
                 SellerId = sellerId,
                 Price = model.Price,
                 CategoryId = model.CategoryId,
-                AuthorId = model.AuthorId,
+                AuthorId = authorService.GetAuthorIdByName(model.Author).Result,
             };
             try
             {
@@ -180,5 +172,10 @@ namespace BookStore.Core.Services
                  .ToListAsync();
         }
 
+        public async  Task<bool> CategoryExist(int id)
+        {
+            return await repository.AllReadOnly<Category>()
+                .AnyAsync(c => c.Id == id);
+        }
     }
 }

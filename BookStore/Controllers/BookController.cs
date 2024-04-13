@@ -12,11 +12,13 @@ namespace BookStore.Controllers
         private readonly ILogger<BookController> logger;
         private readonly ISellerService sellerService;
         private readonly IBookService bookService;
-        public BookController(ILogger<BookController> _logger, IBookService _bookService, ISellerService _sellerService)
+        private readonly IAuthorService authorService;
+        public BookController(ILogger<BookController> _logger, IBookService _bookService, ISellerService _sellerService, IAuthorService _authorService)
         {
             logger = _logger;
             bookService = _bookService;
             sellerService = _sellerService;
+            authorService = _authorService;
         }
         [AllowAnonymous]
         public async Task<IActionResult> All([FromQuery] AllBooksQueryModel query)
@@ -62,25 +64,27 @@ namespace BookStore.Controllers
             var model = new BookFormModel()
             {
                 Categories = await bookService.AllCategoriesAsync(),
-                Authors = await bookService.AuthorListAsync()
             };
             return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> Add(BookFormModel model)
         {
-            if (await sellerService.ExistsById(User.Id()) == false)
+             if (await sellerService.ExistsById(User.Id()) == false)
             {
-                return RedirectToAction(nameof(SellerController.Become), "Seller");
+                return RedirectToAction(nameof(SellerController.Become), "seller");
             }
             if (await bookService.CategoryExist(model.CategoryId) == false)
             {
                 ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist");
             }
-            if (ModelState.IsValid) 
+            if(await bookService.AuthorExist(model.Author) == false)
+            {
+                RedirectToAction(nameof(AuthorController.Create), "Author");
+            }
+            if (!ModelState.IsValid) 
             {
                 model.Categories = await bookService.AllCategoriesAsync();
-                model.Authors = await bookService.AuthorListAsync();
                 return View(model);
             }
             int sellerId = await sellerService.GetSellerId(User.Id());

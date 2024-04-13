@@ -17,6 +17,7 @@ namespace Microsoft.Extension.DependencyInjection
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISellerService, SellerService>();
+            services.AddScoped<IAuthorService, AuthorService>();
             return services;
         }
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)

@@ -14,7 +14,7 @@ namespace BookStore.Infrastructure.Data.SeedDb
                 .Property(p => p.IsActive)
                 .HasDefaultValue(true);
             var data = new SeedData();
-            builder.HasData(new ApplicationUser[] {data.AdminUser, data.GuestUser });
+            builder.HasData(new ApplicationUser[] {data.AdminUser, data.GuestUser, data.Admin2User });
         }
     }
 }

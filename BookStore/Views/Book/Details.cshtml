@@ -23,7 +23,7 @@
                 <p>Description: @Model.Description</p>
                 <p>Category: <b>@Model.Category</b></p>
                 <p>Author: <b>@Model.Author</b></p>
-                <a class="ml-2 btn btn-primary" asp-controller="Author" asp-action="Info">Author info</a>
+                <a class="ml-2 btn btn-primary" asp-controller="Book" asp-action="Buy">Buy</a>
             </div>
             <div class="form-inline">
                 @if (User?.Identity?.Name == "admin@gmail.com")

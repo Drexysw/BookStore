@@ -25,11 +25,10 @@ namespace BookStore.Core.Models.Book
         [Range(BookPriceMinimumValue, BookPriceMaximumValue, ErrorMessage = PriceMessage)]
         public decimal Price { get; set; }
         [Display(Name = "Books' Author")]
-        public int AuthorId { get; set; }
+        public string Author { get; set; } = string.Empty;
         [Display(Name = "Book's Category")]
         public int CategoryId { get; set; }
 
         public IEnumerable<BookCategoryServiceModel> Categories { get; set; } = new List<BookCategoryServiceModel>();
-        public IEnumerable<BookAuthorServiceModel> Authors { get; set; } = new List<BookAuthorServiceModel>();
     }
 }

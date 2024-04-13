@@ -1,4 +1,5 @@
-﻿<nav class="navbar navbar-expand-lg bg-body-tertiary">
+﻿@using BookStore.Extensions.ClaimsPrincipalExtension
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">OnlineBookStore</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,7 +16,13 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" asp-controller="Book" asp-action="All">All</a></li>
-                        <li><a class="dropdown-item" asp-action="Add" asp-controller="Book">Add Book</a></li>
+                        @if (User?.Identity?.Name == "admin@gmail.com")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Add"> Add Book</a>
+                            </li>
+                        }
+
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" asp-action="Mine" asp-controller="Book">My books</a></li>
                     </ul>

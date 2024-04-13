@@ -22,7 +22,8 @@ namespace BookStore.Core.Contracts
         public Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id);
 
         public Task<int> CreateAsync(BookFormModel model, int sellerId);
+        public Task<bool> AuthorExist(string name);
+
         public Task<bool> CategoryExist(int id);
-        public Task<IEnumerable<BookAuthorServiceModel>> AuthorListAsync();
     }
 }

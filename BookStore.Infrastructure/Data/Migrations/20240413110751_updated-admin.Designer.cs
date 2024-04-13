@@ -4,6 +4,7 @@ using BookStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240413110751_updated-admin")]
+    partial class updatedadmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,16 +104,15 @@ namespace BookStore.Data.Migrations
                         {
                             Id = "deal1232-c23-dsds334-sdsk23-b2343431fefe",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "44daf76f-d7ee-43be-bc0b-4caa38c5a516",
+                            ConcurrencyStamp = "cba48b5a-8cc1-4917-b40a-1fe09163cc96",
                             Email = "seller@gmail.com",
                             EmailConfirmed = false,
                             IsActive = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@gmail.com",
                             NormalizedUserName = "seller@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHigSpCej+lgWNxqVIB2+VvzHZ95cjNp6sZnm98mqebNkF0ftVwSKJ2xME9qcmLV+Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEL2QyFOIfazQ+oY/Z0vk+tkxthRKe+yw40UIlK+jcXbvw/VHu9QIhlQQifUndjj3Pw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2898835f-2cd7-4981-9394-5370ced1da30",
                             TwoFactorEnabled = false,
                             UserName = "seller@gmail.com"
                         },
@@ -119,14 +120,14 @@ namespace BookStore.Data.Migrations
                         {
                             Id = "fbjfif33-c23-ooo21-sdsk23-a3jfjcj224",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0bdf9ce4-7835-4f56-b533-64dd2f245e03",
+                            ConcurrencyStamp = "0acd2869-963a-4e05-8808-3a64d534a3ef",
                             Email = "guestuser@gmail.com",
                             EmailConfirmed = false,
                             IsActive = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "guestuser@gmail.com",
                             NormalizedUserName = "guestuser@gmail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEP5uW0n2gj7VcN897kGljMFKHPsiJ8ADBQS4ufCtwr8wl/QX/u8QZ0J2EHCIpkZsPQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEINd3raSWrg0Dfm7tDyu8XLSN3nKJy/LpLR5O740FnLCI40MxIF8aJOE3t11I0+gzQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "guestuser@gmail.com"
@@ -135,7 +136,7 @@ namespace BookStore.Data.Migrations
                         {
                             Id = "bff69dcd-47cd-452a-8536-4823df1b2e70",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fce46d0e-10df-48f8-a4eb-3b806c8e8c79",
+                            ConcurrencyStamp = "2a4e8f04-7f50-4928-99f3-7ed52dc61945",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Stamo",
@@ -144,9 +145,8 @@ namespace BookStore.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMuNUr/x6GmmyREe2NDXXwHvU+UjZE/aM6QJOijza7hvDbYV/0/CqXcxS1/WeFh/Lw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEE4OW5Yl0Vq9zp9Jynby7nJgt19P/pvuGLLaIj1QELTxkXu80GIQm+ZEwi7s+lst8g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2e3112b8-6559-4e6f-a6ce-ee9595405798",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });

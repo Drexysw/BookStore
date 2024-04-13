@@ -15,14 +15,9 @@
                 <span asp-validation-for="Description" class="small text-danger"></span>
             </div>
             <div class="form-group">
-              <label  asp-for="AuthorId"></label>
-                <select asp-for="AuthorId" class="form-control">
-                    @foreach (var author in Model.Authors)
-                    {
-                        <option value="@author.Id">@author.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="CategoryId" class="small text-danger"></span>
+                <label asp-for="Author"></label>
+                <textarea asp-for="Author" rows="4" class="form-control" placeholder="100 pages..."></textarea>
+                <span asp-validation-for="Author" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ImageUrl"></label>

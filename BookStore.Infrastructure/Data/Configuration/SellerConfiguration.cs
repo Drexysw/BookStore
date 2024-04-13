@@ -10,7 +10,7 @@ namespace BookStore.Infrastructure.Data.SeedDb
         public void Configure(EntityTypeBuilder<Seller> builder)
         {
             var data = new SeedData();
-            builder.HasData(new Seller[] {data.Seller});
+            builder.HasData(new Seller[] {data.Seller, data.AdminSeller});
         }
     }
 }
