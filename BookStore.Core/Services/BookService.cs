@@ -284,5 +284,13 @@ namespace BookStore.Core.Services
         {
             return (await repository.GetByIdAsync<Book>(bookId)).CategoryId;
         }
+
+        public async Task Delete(int bookId)
+        {
+            var book = await repository.GetByIdAsync<Book>(bookId);
+             book.IsAvailable = false;
+            await repository.DeleteAsync<Book>(bookId);
+            await repository.SaveChangesAsync();
+        }
     }
 }

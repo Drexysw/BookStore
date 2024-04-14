@@ -1,5 +1,6 @@
 ﻿using BookStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BookStore.Infrastructure.Common
 {
@@ -40,24 +41,35 @@ namespace BookStore.Infrastructure.Common
             return await DbSet<T>().FindAsync(id);
         }
 
-        public Task<T> GetByIdsAsync<T>(object[] id) where T : class
+        public async Task<T> GetByIdsAsync<T>(object[] id) where T : class
         {
-            throw new NotImplementedException();
+            return await DbSet<T>().FindAsync(id);
         }
 
-        public Task DeleteAsync<T>(object id) where T : class
+        public async Task DeleteAsync<T>(object id) where T : class
         {
-            throw new NotImplementedException();
+            T entity = await GetByIdAsync<T>(id);
+
+            Delete<T>(entity);
         }
 
-        public void Delete<T>(T entity) where T : class
+        public  void Delete<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            EntityEntry entry = this.context.Entry(entity);
+
+            if (entry.State == EntityState.Detached)
+            {
+                this.DbSet<T>().Attach(entity);
+            }
+
+            entry.State = EntityState.Deleted;
         }
 
         public void Detach<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            EntityEntry entry = this.context.Entry(entity);
+
+            entry.State = EntityState.Detached;
         }
     }
 }

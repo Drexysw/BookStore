@@ -196,5 +196,45 @@ namespace BookStore.Controllers
 
             return RedirectToAction(nameof(Details), new { id = model.Id});
         }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if ((await bookService.ExistByIdAsync(id)) == false)
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if ((await bookService.HasSellerWithId(id, User.Id())) == false)
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+            var book = await bookService.BookDetailsByIdAsync(id);
+            var model = new BookDetailsServiceModel()
+            {
+                ImageUrl = book.ImageUrl,
+                Title = book.Title,
+                Author = book.Author,
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, BookDetailsServiceModel model)
+        {
+            if ((await bookService.ExistByIdAsync(id)) == false)
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if ((await bookService.HasSellerWithId(id, User.Id())) == false)
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+            await bookService.Delete(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

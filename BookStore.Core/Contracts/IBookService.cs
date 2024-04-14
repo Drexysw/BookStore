@@ -40,6 +40,7 @@ namespace BookStore.Core.Contracts
         public Task<bool> HasSellerWithId(int bookId, string currentUserId);  
 
         public Task<int> GetBookCategoryId(int bookId);
-        
+        Task Delete(int bookId);
+
     }
 }
