@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlineBookstoreManagementSystem.Core.Models.Book;
+using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 namespace BookStore.Core.Services
@@ -290,6 +291,14 @@ namespace BookStore.Core.Services
             var book = await repository.GetByIdAsync<Book>(bookId);
              book.IsAvailable = false;
             await repository.DeleteAsync<Book>(bookId);
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task Leave(int bookId)
+        {
+            var book = await repository.GetByIdAsync<Book>(bookId);
+            book.BuyerId = null;
+
             await repository.SaveChangesAsync();
         }
     }

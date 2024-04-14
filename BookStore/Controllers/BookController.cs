@@ -236,5 +236,23 @@ namespace BookStore.Controllers
 
             return RedirectToAction(nameof(All));
         }
+        [HttpPost]
+        public async Task<IActionResult> Leave(int id)
+        {
+            if ((await bookService.ExistByIdAsync(id)) == false ||
+                (await bookService.IsBought(id)) == false)
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if ((await bookService.IsBoughtByUserWithId(id, User.Id())) == false)
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+            await bookService.Leave(id);
+
+            return RedirectToAction(nameof(Mine));
+        }
     }
 }

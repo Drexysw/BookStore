@@ -41,6 +41,6 @@ namespace BookStore.Core.Contracts
 
         public Task<int> GetBookCategoryId(int bookId);
         Task Delete(int bookId);
-
+        public Task Leave(int bookId);
     }
 }

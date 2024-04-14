@@ -1,5 +1,5 @@
 ﻿@model BookDetailsServiceModel
-
+@inject IBookService bookService
 @{
     ViewBag.Title = "Book Details";
 }
@@ -23,14 +23,14 @@
                 <p>Description: @Model.Description</p>
                 <p>Category: <b>@Model.Category</b></p>
                 <p>Author: <b>@Model.Author</b></p>
-                @if (!Model.IsAvailable)
+                @if (!Model.IsAvailable && await bookService.HasSellerWithId(Model.Id, User.Id()) == false)
                 {
                     <form class="ml-2" asp-controller="Book"
                           asp-action="Buy" asp-route-id="@Model.Id" method="post">
-                        <input class="btn btn-primary" type="submit" value="Rent" />
+                        <input class="btn btn-primary" type="submit" value="Buy" />
                     </form>
                 }
-                else
+                else if (Model.IsAvailable && await bookService.HasSellerWithId(Model.Id, User.Id()) == false)
                 {
                     <form class="ml-2" asp-controller="Book" asp-action="Leave"
                           asp-route-id="@Model.Id" method="post">
