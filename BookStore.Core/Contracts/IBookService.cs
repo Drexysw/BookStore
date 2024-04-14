@@ -30,9 +30,16 @@ namespace BookStore.Core.Contracts
 
         Task<bool> IsBoughtByUserWithId(int houseId, string currentUserId);
 
-        public Task Rent(int houseId, string currentUserId);
+        public Task Buy(int houseId, string currentUserId);
 
         public Task<IEnumerable<BookDetailsServiceModel>> AllBooksByUserIdAsync(string userId);
         Task<IEnumerable<BookDetailsServiceModel>> AllBooksBySellerId(int sellerId);
+
+        public Task Edit(int bookId,  BookFormModel model);
+
+        public Task<bool> HasSellerWithId(int bookId, string currentUserId);  
+
+        public Task<int> GetBookCategoryId(int bookId);
+        
     }
 }

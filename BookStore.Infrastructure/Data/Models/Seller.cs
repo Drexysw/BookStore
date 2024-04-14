@@ -19,6 +19,7 @@ namespace BookStore.Infrastructure.Data.Models
         public string UserId { get; set; } = string.Empty;
         [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; } = null!;
+        public string PhoneNumber { get; set; } = string.Empty;
         public IEnumerable<Book> Books { get; set; } = new List<Book>();
     }
 }

@@ -1,11 +1,4 @@
-﻿using BookStore.Core.Models.Book;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BookStore.Core.Contracts
+﻿namespace BookStore.Core.Contracts
 {
     public interface ISellerService
     {
@@ -14,10 +7,11 @@ namespace BookStore.Core.Contracts
 
         Task<bool> UserHasBuys(string userId);
 
-        Task Create(string userId, string phoneNumber);
+        Task Create(string userId, string phoneNumber, string name);
 
         Task<int> GetSellerId(string userId);
+        Task<bool> UserWithPhoneNumberExists( string phoneNumber);
 
-        
+
     }
 }

@@ -197,7 +197,7 @@ namespace BookStore.Core.Services
             return result;
         }
 
-        public async Task Rent(int houseId, string currentUserId)
+        public async Task Buy(int houseId, string currentUserId)
         {
             var book = await repository.GetByIdAsync<Book>(houseId);
             if (book != null && book.BuyerId == null)
@@ -249,6 +249,40 @@ namespace BookStore.Core.Services
                    IsAvailable = b.BuyerId != null
                })
                .ToListAsync();
+        }
+
+        public async Task Edit(int bookId, BookFormModel model)
+        {
+            var book = await repository.GetByIdAsync<Book>(bookId);
+
+            book.Title = model.Title;
+            book.ImageUrl = model.ImageUrl;
+            book.Price = model.Price;
+            book.CategoryId = model.CategoryId;
+            book.Description = model.Description;
+            book.AuthorId = authorService.GetAuthorIdByName(model.Author).Result;
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task<bool> HasSellerWithId(int bookId, string currentUserId)
+        {
+            bool result = false;
+            var book = await repository.AllReadOnly<Book>()
+                .Where(b => b.Id == bookId)
+                .Where(h => h.IsAvailable)
+                .Include(h => h.Seller)
+                .FirstOrDefaultAsync();
+            if (book?.Seller != null && book.Seller.UserId == currentUserId)
+            {
+                result =  true;
+            }
+            return result;
+        }
+
+        public async Task<int> GetBookCategoryId(int bookId)
+        {
+            return (await repository.GetByIdAsync<Book>(bookId)).CategoryId;
         }
     }
 }

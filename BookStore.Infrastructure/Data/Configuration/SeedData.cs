@@ -73,6 +73,7 @@ namespace BookStore.Infrastructure.Data.Configuration
                 Id = 1,
                 Name = "John",
                 Rating = 5.5,
+                PhoneNumber = "+4563478905",
                 UserId = AdminUser.Id,
             };
             AdminSeller = new Seller()
@@ -80,6 +81,7 @@ namespace BookStore.Infrastructure.Data.Configuration
                 Id = 2,
                 Name = "Stamo",
                 Rating = 6,
+                PhoneNumber = "+0875423556",
                 UserId = Admin2User.Id,
             };
         }

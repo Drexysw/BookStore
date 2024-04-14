@@ -17,12 +17,13 @@ namespace BookStore.Core.Services
 
         
 
-        public async  Task Create(string userId, string name)
+        public async  Task Create(string userId, string phoneNumber, string name)
         {
             var seller = new Seller()
             {
                 UserId = userId,
-                Name = name
+                PhoneNumber = phoneNumber,
+                Name = name 
             };
 
             await repository.AddAsync(seller);
@@ -45,6 +46,12 @@ namespace BookStore.Core.Services
         {
             return await repository.All<Book>()
                 .AnyAsync(h => h.BuyerId == userId);
+        }
+
+        public async Task<bool> UserWithPhoneNumberExists(string phoneNumber)
+        {
+               return await repository.All<Seller>()
+                .AnyAsync(a => a.PhoneNumber == phoneNumber);
         }
     }
 }

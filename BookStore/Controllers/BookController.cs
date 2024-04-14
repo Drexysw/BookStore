@@ -1,7 +1,6 @@
 ﻿using BookStore.Core.Contracts;
 using BookStore.Core.Models.Book;
 using BookStore.Extensions.ClaimsPrincipalExtension;
-using BookStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,7 +50,7 @@ namespace BookStore.Controllers
             {
                 return BadRequest();
             }
-            if (await bookService.ExistByIdAsync(id) == false)
+            if ((await bookService.ExistByIdAsync(id)) == false)
             {
                 return RedirectToAction(nameof(All));
             }
@@ -108,7 +107,7 @@ namespace BookStore.Controllers
             {
                 return RedirectToAction(nameof(All));
             }
-            await bookService.Rent(id, User.Id());
+            await bookService.Buy(id, User.Id());
             return RedirectToAction(nameof(Mine));
         }
         [HttpGet]
@@ -133,6 +132,69 @@ namespace BookStore.Controllers
             }
             return View(myBooks);
 
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if ((await bookService.ExistByIdAsync(id)) == false)
+            {
+                return RedirectToAction(nameof(All));
+            }
+            if (await bookService.HasSellerWithId(id, User.Id()) == false)
+            {
+                logger.LogInformation("User with id {0} attempted to open other seller book", User.Id());
+
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+            var book = await bookService.BookDetailsByIdAsync(id);
+            var categoryId = await bookService.GetBookCategoryId(id);
+            var model = new BookFormModel()
+            {
+                Id = id,
+                Title = book.Title,
+                Description = book.Description,
+                CategoryId = categoryId,
+                ImageUrl = book.ImageUrl,
+                Categories = await bookService.AllCategoriesAsync(),
+                Author = book.Author,
+                Price = book.Price,
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, BookFormModel model)
+        {
+            if (id != model.Id)
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+            if (await bookService.ExistByIdAsync(id) == false)
+            {
+                ModelState.AddModelError("", "House does not exist");
+                model.Categories = await bookService.AllCategoriesAsync();
+
+                return View(model);
+            }
+            if ((await bookService.HasSellerWithId(model.Id, User.Id())) == false)
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+            if ((await bookService.CategoryExist(model.CategoryId)) == false)
+            {
+                ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist");
+                model.Categories = await bookService.AllCategoriesAsync();
+
+                return View(model);
+            }
+            if (ModelState.IsValid == false)
+            {
+                model.Categories = await bookService.AllCategoriesAsync();
+
+                return View(model);
+            }
+            await bookService.Edit(model.Id, model);
+
+            return RedirectToAction(nameof(Details), new { id = model.Id});
         }
     }
 }

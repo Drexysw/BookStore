@@ -1,4 +1,5 @@
 ﻿@using BookStore.Extensions.ClaimsPrincipalExtension
+@inject ISellerService sellerService 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">OnlineBookStore</a>
@@ -16,7 +17,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" asp-controller="Book" asp-action="All">All</a></li>
-                        @if (User?.Identity?.Name == "admin@gmail.com")
+                        @if (User?.Identity?.Name == "admin@gmail.com" || await sellerService.ExistsById(User.Id()))
                         {
                             <li class="nav-item">
                                 <a a class="dropdown-item" asp-area="" asp-controller="Book" asp-action="Add">Add Book</a>
