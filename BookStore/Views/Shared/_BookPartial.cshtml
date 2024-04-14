@@ -1,6 +1,6 @@
 ﻿@model BookDetailsServiceModel
 @inject IBookService bookService
-
+@inject ISellerService sellerService
 <div class="col-md-4">
     <div class="card mb-3">
         <img class="card-img-top" src="@Model.ImageUrl" alt="House Image">
@@ -15,19 +15,19 @@
             <br />
             <a asp-area="" asp-controller="Book" asp-action="Details" asp-route-id="@Model.Id" 
              class="btn btn-success">Details</a>
-            @if (User?.Identity?.Name == "admin@gmail.com" && await bookService.HasSellerWithId(Model.Id, User.Id()))
+            @if (this.User.Identity.IsAuthenticated && (await bookService.HasSellerWithId(Model.Id, User.Id()) || User.IsAdmin()))
             {
                 <a asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
                 <a asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
                 <p></p>
-                @if (!Model.IsAvailable)
+                @if (!Model.IsAvailable && (( await sellerService.ExistsById(User.Id()) == false || User.IsAdmin())))
                 {
                     <form class="input-group-sm" asp-area="" asp-controller="Book"
                   asp-action="Buy" asp-route-id="@Model.Id" method="post">
                         <input class="btn btn-primary" type="submit" value="Buy" />
                     </form>
                 }
-                else
+                else if (await bookService.IsBoughtByUserWithId(Model.Id, User.Id()))
                 {
                     <form asp-area="" asp-controller="Book" asp-action="Leave"
                   asp-route-id="@Model.Id" method="post">

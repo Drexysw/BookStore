@@ -1,5 +1,6 @@
 ﻿@model BookDetailsServiceModel
 @inject IBookService bookService
+@inject ISellerService sellerService
 @{
     ViewBag.Title = "Book Details";
 }
@@ -23,14 +24,14 @@
                 <p>Description: @Model.Description</p>
                 <p>Category: <b>@Model.Category</b></p>
                 <p>Author: <b>@Model.Author</b></p>
-                @if (!Model.IsAvailable && await bookService.HasSellerWithId(Model.Id, User.Id()) == false)
+                @if (Model.IsAvailable = true && (await sellerService.ExistsById(User.Id()) == false || User.IsAdmin()))
                 {
                     <form class="ml-2" asp-controller="Book"
                           asp-action="Buy" asp-route-id="@Model.Id" method="post">
                         <input class="btn btn-primary" type="submit" value="Buy" />
                     </form>
                 }
-                else if (Model.IsAvailable && await bookService.HasSellerWithId(Model.Id, User.Id()) == false)
+                else if (Model.IsAvailable = false && (await bookService.IsBoughtByUserWithId(Model.Id,User.Id())))
                 {
                     <form class="ml-2" asp-controller="Book" asp-action="Leave"
                           asp-route-id="@Model.Id" method="post">
@@ -39,7 +40,7 @@
                 }
             </div>
             <div class="form-inline">
-                @if (User?.Identity?.Name == "admin@gmail.com")
+                @if (await bookService.HasSellerWithId(Model.Id, User.Id()) || User.IsAdmin())
                 {
                     <a class="btn btn-warning" asp-controller="Book" asp-action="Edit"
                        asp-route-id="@Model.Id">Edit</a>

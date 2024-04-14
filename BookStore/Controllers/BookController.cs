@@ -93,7 +93,7 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> Buy(int id)
         {
-            if (await bookService.ExistByIdAsync(id) == false)
+            if (await bookService.ExistByIdAsync(id) == false && User.IsAdmin() == false )
             {
                 return RedirectToAction(nameof(All));
             }
@@ -140,7 +140,7 @@ namespace BookStore.Controllers
             {
                 return RedirectToAction(nameof(All));
             }
-            if (await bookService.HasSellerWithId(id, User.Id()) == false)
+            if (await bookService.HasSellerWithId(id, User.Id()) == false && User.IsAdmin() == false)
             {
                 logger.LogInformation("User with id {0} attempted to open other seller book", User.Id());
 
@@ -175,7 +175,7 @@ namespace BookStore.Controllers
 
                 return View(model);
             }
-            if ((await bookService.HasSellerWithId(model.Id, User.Id())) == false)
+            if ((await bookService.HasSellerWithId(model.Id, User.Id())) == false && User.IsAdmin() == false)
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
@@ -204,7 +204,7 @@ namespace BookStore.Controllers
                 return RedirectToAction(nameof(All));
             }
 
-            if ((await bookService.HasSellerWithId(id, User.Id())) == false)
+            if ((await bookService.HasSellerWithId(id, User.Id())) == false && User.IsAdmin() == false)
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
@@ -227,7 +227,7 @@ namespace BookStore.Controllers
                 return RedirectToAction(nameof(All));
             }
 
-            if ((await bookService.HasSellerWithId(id, User.Id())) == false)
+            if ((await bookService.HasSellerWithId(id, User.Id())) == false && User.IsAdmin() == false)
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
