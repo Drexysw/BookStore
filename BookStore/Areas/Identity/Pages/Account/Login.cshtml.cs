@@ -15,13 +15,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using BookStore.Infrastructure.Data.Models;
+using static BookStore.Core.Constants.RoleConstants;
 
 namespace BookStore.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
@@ -119,10 +120,11 @@ namespace BookStore.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
+                    _logger.LogInformation("User logged in");
 
-                    if (user != null && await _userManager.IsInRoleAsync(user, "Administrator"))
+                    if (user != null && await _userManager.IsInRoleAsync(user, AdminRole))
                     {
-                        return RedirectToAction("Index", "Admin", new { Area = "Admin" });
+                        return RedirectToAction("Dashboard", "Home", new { Area = "Admin" });
                     }
 
                     _logger.LogInformation("User logged in.");
