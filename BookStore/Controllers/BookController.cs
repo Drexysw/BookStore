@@ -112,10 +112,10 @@ namespace BookStore.Controllers
         public async Task<IActionResult> Mine()
         {
 
-           // if (User.IsInRole(AdminRole))
-            //{
-            //    return RedirectToAction("Mine", "Book", new { area = "Admin" });
-            //}
+            if (User.IsInRole(AdminRole))
+            {
+                return RedirectToAction("Mine", "Book", new { area = "Admin" });
+            }
 
             IEnumerable<BookDetailsServiceModel> myBooks;
             var userId = User.Id();

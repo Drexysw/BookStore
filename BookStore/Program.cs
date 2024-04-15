@@ -42,7 +42,7 @@ app.UseEndpoints(endpoints =>
             name: "areas",
             pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
-    endpoints.MapDefaultControllerRoute();
+    endpoints.MapDefaultControllerRoute();  
     endpoints.MapRazorPages();
 });
 
