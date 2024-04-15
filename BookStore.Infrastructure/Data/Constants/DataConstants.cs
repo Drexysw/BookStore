@@ -14,7 +14,7 @@
         public const int AuthorNameMaxLenght = 30;
         public const int AuthorNameMinLenght = 3;
 
-        public const int AuthobriographyMaxLenght = 150;
+        public const int AuthobriographyMaxLenght = 330;
         public const int AuthobriographyMinLenght = 20;
 
         public const int SellerNameMaxLengh = 30;

@@ -55,6 +55,8 @@ namespace BookStore.Infrastructure.Data.Models
         public IEnumerable<Order> Orders { get; set; } = new List<Order>();
 
         public bool IsAvailable { get; set; } = true;
+        [Comment("Is book approved by admin")]
+        public bool IsApproved { get; set; }
 
     }
 }

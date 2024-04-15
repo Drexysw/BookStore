@@ -3,7 +3,7 @@ using BookStore.Core.Models.Book;
 using BookStore.Extensions.ClaimsPrincipalExtension;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using static BookStore.Core.Constants.RoleConstants;
 namespace BookStore.Controllers
 {
     public class BookController : Controller
@@ -79,7 +79,7 @@ namespace BookStore.Controllers
             }
             if (await bookService.AuthorExist(model.Author) == false)
             {
-                RedirectToAction(nameof(AuthorController.Create), "Author");
+                return RedirectToAction(nameof(AuthorController.Create), "Author");
             }
             if (!ModelState.IsValid)
             {
@@ -97,12 +97,12 @@ namespace BookStore.Controllers
             {
                 return RedirectToAction(nameof(All));
             }
-            /*
-            if (!User.IsInRole(AdminRolleName) && await sellerService.ExistsById(User.Id()))
+            
+            if (!User.IsInRole(AdminRole) && await sellerService.ExistsById(User.Id()))
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
-            */
+            
             if (await bookService.IsBought(id))
             {
                 return RedirectToAction(nameof(All));
@@ -113,12 +113,12 @@ namespace BookStore.Controllers
         [HttpGet]
         public async Task<IActionResult> Mine()
         {
-            /*
-            if (User.IsInRole(AdminRolleName))
+            
+            if (User.IsInRole(AdminRole))
             {
-                return RedirectToAction("Mine", "House", new { area = AreaName });
+                return RedirectToAction("Mine", "Book", new { area = "Admin" });
             }
-            */
+            
             IEnumerable<BookDetailsServiceModel> myBooks;
             var userId = User.Id();
             if (await sellerService.ExistsById(userId))
@@ -174,6 +174,10 @@ namespace BookStore.Controllers
                 model.Categories = await bookService.AllCategoriesAsync();
 
                 return View(model);
+            }
+            if (await bookService.AuthorExist(model.Author) == false)
+            {
+                RedirectToAction(nameof(AuthorController.Create), "Author");
             }
             if ((await bookService.HasSellerWithId(model.Id, User.Id())) == false && User.IsAdmin() == false)
             {

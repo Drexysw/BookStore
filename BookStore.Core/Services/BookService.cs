@@ -33,7 +33,8 @@ namespace BookStore.Core.Services
             int currentPage = 1,
             int booksperpage = 1)
         {
-            var booksToShow = repository.AllReadOnly<Book>();
+            var booksToShow = repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved);
             var result = new BookQueryServiceModel();
             if (string.IsNullOrEmpty(category) == false)
             {
@@ -71,6 +72,7 @@ namespace BookStore.Core.Services
         public async Task<IEnumerable<BooksAllServiceModel>> AllBooksAsync()
         {
             return await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                  .OrderBy(b => b.Id)
                  .Select(b => new BooksAllServiceModel()
                  {
@@ -107,6 +109,7 @@ namespace BookStore.Core.Services
         public async Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id)
         {
             return await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                  .Where(b => b.Id == id)
                  .Select(b => new BookDetailsServiceModel()
                  {
@@ -124,7 +127,7 @@ namespace BookStore.Core.Services
 
         public async Task<bool> AuthorExist(string name)
         {
-            return await repository.AllReadOnly<Category>()
+            return await repository.AllReadOnly<Author>()
                 .AnyAsync(c => c.Name == name);
         }
 
@@ -139,7 +142,8 @@ namespace BookStore.Core.Services
                 Price = model.Price,
                 CategoryId = model.CategoryId,
                 AuthorId = authorService.GetAuthorIdByName(model.Author).Result,
-            };
+                IsApproved = true,
+            };  
             try
             {
                 await repository.AddAsync(book);
@@ -155,12 +159,14 @@ namespace BookStore.Core.Services
         public async Task<bool> ExistByIdAsync(int id)
         {
             return await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                 .AnyAsync(b => b.Id == id);
         }
 
         public async Task<IEnumerable<BookServiceModel>> LastThreeBooksAsync()
         {
             return await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                 .OrderByDescending(b => b)
                 .Take(3)
                  .Select(b => new BookServiceModel()
@@ -188,6 +194,7 @@ namespace BookStore.Core.Services
         {
             bool result = false;
             var house = await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                 .Where(h => h.Id == houseId)
                 .Where(h => h.IsAvailable)
                 .FirstOrDefaultAsync();
@@ -215,6 +222,7 @@ namespace BookStore.Core.Services
         public async Task<IEnumerable<BookDetailsServiceModel>> AllBooksByUserIdAsync(string userId)
         {
             return await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                 .Where(b => b.BuyerId == userId)
                 .Where(b => b.IsAvailable)
                 .Select(b => new BookDetailsServiceModel()
@@ -236,6 +244,7 @@ namespace BookStore.Core.Services
         public async Task<IEnumerable<BookDetailsServiceModel>> AllBooksBySellerId(int sellerId)
         {
             return await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                .Where(b => b.SellerId == sellerId)
                .Where(b => b.IsAvailable)
                .Select(b => new BookDetailsServiceModel()
@@ -270,6 +279,7 @@ namespace BookStore.Core.Services
         {
             bool result = false;
             var book = await repository.AllReadOnly<Book>()
+                .Where(h => h.IsApproved)
                 .Where(b => b.Id == bookId)
                 .Where(h => h.IsAvailable)
                 .Include(h => h.Seller)
