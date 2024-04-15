@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using static BookStore.Core.Constants.RoleConstants;
 namespace BookStore.Controllers
 {
-    public class BookController : Controller
+    public class BookController : BaseController
     {
         private readonly ILogger<BookController> logger;
         private readonly ISellerService sellerService;
@@ -19,7 +19,6 @@ namespace BookStore.Controllers
             sellerService = _sellerService;
             authorService = _authorService;
         }
-        [AllowAnonymous]
         public async Task<IActionResult> All([FromQuery] AllBooksQueryModel query)
         {
             if (User?.Identity?.IsAuthenticated == false)
@@ -39,7 +38,6 @@ namespace BookStore.Controllers
 
             return View(query);
         }
-        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             if (User?.Identity?.IsAuthenticated == false)
@@ -93,16 +91,16 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> Buy(int id)
         {
-            if (await bookService.ExistByIdAsync(id) == false && User.IsAdmin() == false )
+            if (await bookService.ExistByIdAsync(id) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(All));
             }
-            
+
             if (!User.IsInRole(AdminRole) && await sellerService.ExistsById(User.Id()))
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
-            
+
             if (await bookService.IsBought(id))
             {
                 return RedirectToAction(nameof(All));
@@ -113,12 +111,12 @@ namespace BookStore.Controllers
         [HttpGet]
         public async Task<IActionResult> Mine()
         {
-            
-            if (User.IsInRole(AdminRole))
-            {
-                return RedirectToAction("Mine", "Book", new { area = "Admin" });
-            }
-            
+
+           // if (User.IsInRole(AdminRole))
+            //{
+            //    return RedirectToAction("Mine", "Book", new { area = "Admin" });
+            //}
+
             IEnumerable<BookDetailsServiceModel> myBooks;
             var userId = User.Id();
             if (await sellerService.ExistsById(userId))
@@ -198,7 +196,7 @@ namespace BookStore.Controllers
             }
             await bookService.Edit(model.Id, model);
 
-            return RedirectToAction(nameof(Details), new { id = model.Id});
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)

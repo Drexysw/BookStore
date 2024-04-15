@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 namespace BookStore.Controllers
 {
-    public class SellerController : Controller
+    public class SellerController : BaseController
     {
         private readonly IRepository repository;
         private readonly ISellerService selllerService;
