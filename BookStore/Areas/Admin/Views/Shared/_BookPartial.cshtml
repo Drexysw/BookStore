@@ -19,7 +19,7 @@
                 <a asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
                 <a asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
                 <p></p>
-                else if (await bookService.IsBoughtByUserWithId(Model.Id, User.Id()))
+                @if (await bookService.IsBoughtByUserWithId(Model.Id, User.Id()))
                 {
                     <form asp-area="" asp-controller="Book" asp-action="Leave"
                   asp-route-id="@Model.Id" method="post">

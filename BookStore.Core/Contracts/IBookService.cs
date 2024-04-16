@@ -44,5 +44,9 @@ namespace BookStore.Core.Contracts
         public Task Leave(int bookId);
 
         public string GetBookNameByIdAsync(int bookId);
+
+        Task ApproveBookAsync(int bookId);
+
+        Task<IEnumerable<BookDetailsServiceModel>> GetAnApprove();
     }
 }

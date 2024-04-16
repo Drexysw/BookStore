@@ -21,5 +21,17 @@ namespace BookStore.Areas.Admin.Controllers
             return View(myBooks);
 
         }
+        [HttpGet]
+        public async Task<IActionResult> Approve()
+        {
+            var book = await bookService.GetAnApprove();
+            return View(book);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Approve(int houseId)
+        {
+            await bookService.ApproveBookAsync(houseId);
+            return RedirectToAction(nameof(Approve));
+        }
     }
 }

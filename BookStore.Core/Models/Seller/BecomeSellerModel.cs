@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.ComponentModel.DataAnnotations;
+using static BookStore.Infrastructure.Data.Constants.DataConstants;
 namespace BookStore.Core.Models.Seller
 {
     public class BecomeSellerModel
     {
         [Required]
-        [StringLength(15, MinimumLength = 7)]
+        [StringLength(SellerMaximumPhoneLenght, MinimumLength = SellerMinimumPhoneLenght)]
         [Phone]
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; } = null!;
 
         [Required]
-        [StringLength(3, MinimumLength = 40)]
+        [StringLength(SellerMaximumNameLenght, MinimumLength = SellerMinimumNameLenght)]
         [Display(Name = "Your Name")]
         public string Name { get; set; } = string.Empty;
     }

@@ -317,5 +317,31 @@ namespace BookStore.Core.Services
         {
             return repository.GetByIdAsync<Book>(bookId).Result.Title;
         }
+
+        public async Task ApproveBookAsync(int bookId)
+        {
+            var book = await repository.GetByIdAsync<Book>(bookId);
+            if (book != null && book.IsApproved == false)
+            {
+                book.IsApproved = true;
+                await repository.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<BookDetailsServiceModel>> GetAnApprove()
+        {
+            return await repository.AllReadOnly<Book>()
+                .Where(b => b.IsApproved  == false)
+                .Select(b => new BookDetailsServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Description = b.Description,
+                    ImageUrl = b.ImageUrl,
+                    Price = b.Price,
+                    Author = b.Author.Name
+                })
+                .ToListAsync();
+        }
     }
 }

@@ -22,5 +22,11 @@
 
         public const int BookCategoryNameMaxLenght = 50;
         public const int BookCategoryNameminLenght = 3;
+
+        public const int SellerMaximumPhoneLenght = 15;
+        public const int SellerMinimumPhoneLenght = 15;
+
+        public const int SellerMaximumNameLenght = 40;
+        public const int SellerMinimumNameLenght = 3;
     }
 }

@@ -34,11 +34,12 @@ namespace Microsoft.Extension.DependencyInjection
         {
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = config.GetValue<bool>("Identity:RequireConfirmedAccount");
-                options.SignIn.RequireConfirmedEmail = config.GetValue<bool>("Identity:RequireConfirmedEmail");
-                options.SignIn.RequireConfirmedPhoneNumber = config.GetValue<bool>("Identity:RequireConfirmedPhoneNumber");
-                options.Password.RequiredLength = config.GetValue<int>("Identity:RequiredLength");
-                options.Password.RequireNonAlphanumeric = config.GetValue<bool>("Identity:RequireNonAlphanumeric");
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
