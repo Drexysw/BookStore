@@ -9,7 +9,7 @@ namespace BookStore.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ForReview()
+        public IActionResult ForReview()
         {
             return View();
         }

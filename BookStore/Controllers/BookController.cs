@@ -1,9 +1,11 @@
 ﻿using BookStore.Core.Contracts;
+using BookStore.Core.Exceptions;
 using BookStore.Core.Models.Book;
 using BookStore.Extensions.ClaimsPrincipalExtension;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BookStore.Core.Constants.RoleConstants;
+using static BookStore.Core.Exceptions.Constants.ExceptionConstants;
 namespace BookStore.Controllers
 {
     public class BookController : BaseController
@@ -12,12 +14,14 @@ namespace BookStore.Controllers
         private readonly ISellerService sellerService;
         private readonly IBookService bookService;
         private readonly IAuthorService authorService;
-        public BookController(ILogger<BookController> _logger, IBookService _bookService, ISellerService _sellerService, IAuthorService _authorService)
+        private readonly IOrderService orderService;
+        public BookController(ILogger<BookController> _logger, IBookService _bookService, ISellerService _sellerService, IAuthorService _authorService, IOrderService _orderService)
         {
             logger = _logger;
             bookService = _bookService;
             sellerService = _sellerService;
             authorService = _authorService;
+            orderService = _orderService;
         }
         public async Task<IActionResult> All([FromQuery] AllBooksQueryModel query)
         {
@@ -50,7 +54,7 @@ namespace BookStore.Controllers
             }
             if ((await bookService.ExistByIdAsync(id)) == false)
             {
-                return RedirectToAction(nameof(All));
+                return BadRequest();
             }
             var model = await bookService.BookDetailsByIdAsync(id);
             return View(model);
@@ -86,6 +90,8 @@ namespace BookStore.Controllers
             }
             int sellerId = await sellerService.GetSellerId(User.Id());
             int id = await bookService.CreateAsync(model, sellerId);
+            await orderService.Create(id,User.Id());
+
             return RedirectToAction(nameof(Details), new { id = id });
         }
         [HttpPost]
@@ -93,12 +99,12 @@ namespace BookStore.Controllers
         {
             if (await bookService.ExistByIdAsync(id) == false && User.IsAdmin() == false)
             {
-                return RedirectToAction(nameof(All));
+                return BadRequest();
             }
 
             if (!User.IsInRole(AdminRole) && await sellerService.ExistsById(User.Id()))
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
 
             if (await bookService.IsBought(id))
@@ -142,7 +148,7 @@ namespace BookStore.Controllers
             {
                 logger.LogInformation("User with id {0} attempted to open other seller book", User.Id());
 
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
             var book = await bookService.BookDetailsByIdAsync(id);
             var categoryId = await bookService.GetBookCategoryId(id);
@@ -164,7 +170,7 @@ namespace BookStore.Controllers
         {
             if (id != model.Id)
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
             if (await bookService.ExistByIdAsync(id) == false)
             {
@@ -179,7 +185,7 @@ namespace BookStore.Controllers
             }
             if ((await bookService.HasSellerWithId(model.Id, User.Id())) == false && User.IsAdmin() == false)
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
             if ((await bookService.CategoryExist(model.CategoryId)) == false)
             {
@@ -208,7 +214,7 @@ namespace BookStore.Controllers
 
             if ((await bookService.HasSellerWithId(id, User.Id())) == false && User.IsAdmin() == false)
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
 
             var book = await bookService.BookDetailsByIdAsync(id);
@@ -231,7 +237,7 @@ namespace BookStore.Controllers
 
             if ((await bookService.HasSellerWithId(id, User.Id())) == false && User.IsAdmin() == false)
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
 
             await bookService.Delete(id);
@@ -244,12 +250,12 @@ namespace BookStore.Controllers
             if ((await bookService.ExistByIdAsync(id)) == false ||
                 (await bookService.IsBought(id)) == false)
             {
-                return RedirectToAction(nameof(All));
+                return RedirectToAction("Error", "Home", BadRequest());
             }
 
             if ((await bookService.IsBoughtByUserWithId(id, User.Id())) == false)
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                return Unauthorized();
             }
 
             await bookService.Leave(id);

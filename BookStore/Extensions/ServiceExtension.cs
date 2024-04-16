@@ -18,6 +18,7 @@ namespace Microsoft.Extension.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISellerService, SellerService>();
             services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
@@ -41,6 +42,14 @@ namespace Microsoft.Extension.DependencyInjection
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication()
+                .AddCookie(options =>
+                {
+                    options.LoginPath = PathString.FromUriComponent("/Identity/Account/Login");
+                    options.LogoutPath = PathString.FromUriComponent("/Identity/Account/Logout");
+
+                });
+
             return services;
         }
     }

@@ -144,6 +144,7 @@ namespace BookStore.Core.Services
                 AuthorId = authorService.GetAuthorIdByName(model.Author).Result,
                 IsApproved = true,
             };  
+            
             try
             {
                 await repository.AddAsync(book);
@@ -310,6 +311,11 @@ namespace BookStore.Core.Services
             book.BuyerId = null;
 
             await repository.SaveChangesAsync();
+        }
+
+        public  string GetBookNameByIdAsync(int bookId)
+        {
+            return repository.GetByIdAsync<Book>(bookId).Result.Title;
         }
     }
 }

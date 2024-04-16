@@ -1,4 +1,5 @@
-﻿using BookStore.Infrastructure.Data.Models;
+﻿using BookStore.Infrastructure.Data.Configuration;
+using BookStore.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,8 +16,9 @@ namespace BookStore.Infrastructure.Data.SeedDb
                 .HasOne(o => o.Book)
                 .WithMany(o => o.Orders)
                 .OnDelete(DeleteBehavior.Restrict);
+            var data = new SeedData();
+            builder.HasData(new Order[] { data.FirstOrder, data.SecondOrder, data.ThirdOrder });
 
-            
         }
     }
 }

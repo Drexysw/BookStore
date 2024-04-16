@@ -1,4 +1,4 @@
-﻿using BookStore.Core.Contracts.Admin;
+﻿ using BookStore.Core.Contracts.Admin;
 using BookStore.Core.Models.Admin;
 using BookStore.Infrastructure.Common;
 using BookStore.Infrastructure.Data.Models;

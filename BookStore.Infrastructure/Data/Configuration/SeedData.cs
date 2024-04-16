@@ -19,6 +19,9 @@ namespace BookStore.Infrastructure.Data.Configuration
         public Author FirstAuthor { get; set; } = new Author();
         public Author SecondAuthor { get; set; } = new Author();
         public Author ThirdAuthor { get; set; } = new Author();
+        public Order FirstOrder { get; set; } = new Order();
+        public Order SecondOrder { get; set; } = new Order();
+        public Order ThirdOrder { get; set; } = new Order();
         public SeedData()
         {
             SeedUsers();
@@ -26,6 +29,7 @@ namespace BookStore.Infrastructure.Data.Configuration
             SeedCategories();
             SeedAuthors();
             SeedBooks();
+            SeedOrders();
         }
 
         private void SeedUsers()
@@ -170,6 +174,24 @@ namespace BookStore.Infrastructure.Data.Configuration
                 Name = "Fairy Tale",
                 Authobriography = "He is one of the most artistic people on earth",
                 Age = 50
+            };
+        }
+        private void SeedOrders()
+        {
+            FirstOrder = new Order()
+            {
+                BookId = FirstBook.Id,
+                BuyerId = GuestUser.Id
+            };
+            SecondOrder = new Order()
+            {
+                BookId = SecondBook.Id,
+                BuyerId = GuestUser.Id
+            };
+            ThirdOrder = new Order()
+            {
+                BookId = ThirdBook.Id,
+                BuyerId = GuestUser.Id
             };
         }
     }

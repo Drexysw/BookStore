@@ -1,11 +1,16 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extension.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddApplicationIdentity(builder.Configuration);
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+});
 
 builder.Services.AddApplicationServices();
 
@@ -19,7 +24,8 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Home/Error/500");
+    app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
     app.UseHsts();
 }
 
