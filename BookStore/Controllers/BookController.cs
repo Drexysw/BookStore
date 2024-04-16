@@ -90,8 +90,7 @@ namespace BookStore.Controllers
             }
             int sellerId = await sellerService.GetSellerId(User.Id());
             int id = await bookService.CreateAsync(model, sellerId);
-            await orderService.Create(id,User.Id());
-
+            
             return RedirectToAction(nameof(Details), new { id = id });
         }
         [HttpPost]
@@ -112,6 +111,7 @@ namespace BookStore.Controllers
                 return RedirectToAction(nameof(All));
             }
             await bookService.Buy(id, User.Id());
+            await orderService.Create(id, User.Id());
             return RedirectToAction(nameof(Mine));
         }
         [HttpGet]
@@ -259,7 +259,7 @@ namespace BookStore.Controllers
             }
 
             await bookService.Leave(id);
-
+            await orderService.Delete(id, User.Id());
             return RedirectToAction(nameof(Mine));
         }
     }

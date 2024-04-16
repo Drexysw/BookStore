@@ -21,8 +21,8 @@ namespace BookStore.Core.Models.Book
         public string ImageUrl { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
-        [Display(Name = "Price of the book")]
         [Range(BookPriceMinimumValue, BookPriceMaximumValue, ErrorMessage = PriceMessage)]
+        [Display(Name = "Price of the book")]
         public decimal Price { get; set; }
         [Display(Name = "Books' Author")]
         public string Author { get; set; } = string.Empty;

@@ -42,6 +42,14 @@ namespace BookStore.Core.Services
             }
         }
 
+        public async Task Delete(int bookId, string userId)
+        {
+            var order = await repository.AllReadOnly<Order>()
+                .Where(b => b.BookId == bookId && b.BuyerId == userId)
+                .SingleAsync();
+            repository.Delete(order);
+        }
+
         public async Task<IEnumerable<OrderServiceModel>> GetOrders()
         {
             return await repository.AllReadOnly<Order>()
