@@ -42,7 +42,9 @@ namespace BookStore.Infrastructure.Data.Configuration
                 NormalizedUserName = "seller@gmail.com",
                 Email = "seller@gmail.com",
                 NormalizedEmail = "admin@gmail.com",
-                SecurityStamp = "2898835f-2cd7-4981-9394-5370ced1da30"
+                SecurityStamp = "2898835f-2cd7-4981-9394-5370ced1da30",
+                FirstName = "David",
+                LastName = "Davidov"
             };
             AdminUser.PasswordHash = hasher.HashPassword(AdminUser, "admin123");
 
@@ -52,7 +54,9 @@ namespace BookStore.Infrastructure.Data.Configuration
                 UserName = "guestuser@gmail.com",
                 NormalizedUserName = "guestuser@gmail.com",
                 Email = "guestuser@gmail.com",
-                NormalizedEmail = "guestuser@gmail.com"
+                NormalizedEmail = "guestuser@gmail.com",
+                FirstName = "David",
+                LastName = "Davidov"
             };
             GuestUser.PasswordHash = hasher.HashPassword(GuestUser, "guest123");
 
@@ -63,9 +67,9 @@ namespace BookStore.Infrastructure.Data.Configuration
                 NormalizedUserName = "ADMIN@GMAIL.COM",
                 Email = "admin@gmail.com",
                 NormalizedEmail = "ADMIN@GMAIL.COM",
+                SecurityStamp = "2e3112b8-6559-4e6f-a6ce-ee9595405798",
                 FirstName = "Stamo",
-                LastName = "Petkov",
-                SecurityStamp = "2e3112b8-6559-4e6f-a6ce-ee9595405798"
+                LastName = "Petkov"
             };
             Admin2User.PasswordHash = hasher.HashPassword(Admin2User, "admin2123");
         }

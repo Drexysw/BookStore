@@ -47,7 +47,7 @@ namespace BookStore.Core.Services
             return await repository.AllReadOnly<Order>()
                 .Select(s => new OrderServiceModel()
                 {
-                    Buyer = userService.UserFullName(s.BuyerId).Result,
+                    Buyer = userService.UserFullNameAsync(s.BuyerId).Result,
                     Book = bookService.GetBookNameByIdAsync(s.BookId)
                 })
                 .ToListAsync();

@@ -4,10 +4,9 @@ namespace BookStore.Core.Contracts.Admin
 {
     public interface IUserService
     {
-        Task<string> UserFullName(string userId);
+        Task<string> UserFullNameAsync(string userId);
 
-        Task<IEnumerable<UserServiceModel>> All();
+        Task<IEnumerable<UserServiceModel>> AllAsync();
 
-        Task<bool> Forget(string userId);
     }
 }

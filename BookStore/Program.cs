@@ -1,10 +1,8 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extension.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
+
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddApplicationIdentity(builder.Configuration);
 builder.Services.AddControllersWithViews(opt =>
@@ -13,10 +11,10 @@ builder.Services.AddControllersWithViews(opt =>
 });
 
 builder.Services.AddApplicationServices();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
