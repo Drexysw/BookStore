@@ -41,12 +41,14 @@ app.UseEndpoints(endpoints =>
         name: "Book Details",
         pattern: "/Book/Details/{id}",
         defaults: new { Controller = "Book", Action = "Details" }
-        );
+    );
+
     endpoints.MapControllerRoute(
             name: "areas",
             pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
-    endpoints.MapDefaultControllerRoute();  
+
+    endpoints.MapDefaultControllerRoute();
     endpoints.MapRazorPages();
 });
 
