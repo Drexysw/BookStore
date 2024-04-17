@@ -52,13 +52,15 @@ namespace BookStore.Core.Services
 
         public async Task<IEnumerable<OrderServiceModel>> GetOrders()
         {
-            return await repository.AllReadOnly<Order>()
-                .Select(s => new OrderServiceModel()
-                {
-                    Buyer = userService.UserFullNameAsync(s.BuyerId).Result,
-                    Book = bookService.GetBookNameByIdAsync(s.BookId)
-                })
-                .ToListAsync();
+            var orders = await repository.AllReadOnly<Order>().ToListAsync();
+
+            var orderServiceModels = orders.Select(s => new OrderServiceModel()
+            {
+                Buyer = userService.UserFullNameAsync(s.BuyerId).Result,
+                Book = bookService.GetBookNameByIdAsync(s.BookId)
+            }).ToList();
+
+            return orderServiceModels;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace BookStore.Areas.Admin.Controllers
         }
         public async Task<IActionResult> All()
         {
-            var model = await orderService.GetOrders();
+            var model = await  orderService.GetOrders();
             return View(model);
         }
     }
