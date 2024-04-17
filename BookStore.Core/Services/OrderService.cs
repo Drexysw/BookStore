@@ -1,4 +1,4 @@
-﻿using BookStore.Core.Contracts;
+﻿    using BookStore.Core.Contracts;
 using BookStore.Core.Contracts.Admin;
 using BookStore.Core.Models.Order;
 using BookStore.Infrastructure.Common;
@@ -23,6 +23,10 @@ namespace BookStore.Core.Services
             repository = _repository;
             bookService = _bookService;
             userService = _userService;
+        }
+        public OrderService(IRepository _repository)
+        {
+            repository = _repository;
         }
         public async Task Create(int bookId, string userId)
         {
