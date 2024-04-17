@@ -259,7 +259,6 @@ namespace BookStore.Controllers
             }
 
             await bookService.Leave(id);
-            await orderService.Delete(id, User.Id());
             return RedirectToAction(nameof(Mine));
         }
     }

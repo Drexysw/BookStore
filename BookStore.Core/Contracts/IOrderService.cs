@@ -12,6 +12,5 @@ namespace BookStore.Core.Contracts
         Task Create(int bookId,string userId);
         Task<IEnumerable<OrderServiceModel>> GetOrders();
 
-        Task Delete(int bookId,string userId);
     }
 }
