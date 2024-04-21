@@ -15,7 +15,7 @@ namespace BookStore.Controllers
         }
         public async Task<IActionResult> All()
         {
-            if (!User.IsAdmin() || await sellerService.ExistsById(User.Id()) == false)
+            if (!User.IsAdmin() && await sellerService.ExistsById(User.Id()) == false)
             {
                 return Unauthorized();
             }
