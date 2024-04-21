@@ -56,7 +56,7 @@ namespace BookStore.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            await selllerService.Create(userId, model.PhoneNumber, name);
+            await selllerService.Create(userId, model.PhoneNumber, name!);
             return RedirectToAction("All", "Book");
         }
     }

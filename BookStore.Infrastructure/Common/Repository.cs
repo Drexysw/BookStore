@@ -44,10 +44,7 @@ namespace BookStore.Infrastructure.Common
             return await DbSet<T>().FindAsync(id);
         }
 
-        public async Task<T> GetByIdsAsync<T>(object[] id) where T : class
-        {
-            return await DbSet<T>().FindAsync(id);
-        }
+        
 
         public async Task DeleteAsync<T>(object id) where T : class
         {
@@ -68,11 +65,6 @@ namespace BookStore.Infrastructure.Common
             entry.State = EntityState.Deleted;
         }
 
-        public void Detach<T>(T entity) where T : class
-        {
-            EntityEntry entry = this.context.Entry(entity);
-
-            entry.State = EntityState.Detached;
-        }
+       
     }
 }

@@ -9,9 +9,6 @@ namespace BookStore.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult ForReview()
-        {
-            return View();
-        }
+      
     }
 }

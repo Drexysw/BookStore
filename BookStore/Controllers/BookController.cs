@@ -90,7 +90,7 @@ namespace BookStore.Controllers
             }
             int sellerId = await sellerService.GetSellerId(User.Id());
             int id = await bookService.CreateAsync(model, sellerId);
-            
+
             return RedirectToAction(nameof(Details), new { id = id });
         }
         [HttpPost]
@@ -110,8 +110,12 @@ namespace BookStore.Controllers
             {
                 return RedirectToAction(nameof(All));
             }
+
             await bookService.Buy(id, User.Id());
-            await orderService.Create(id, User.Id());
+            if (!orderService.Exist(id, User.Id()))
+            {
+                await orderService.Create(id, User.Id());
+            }
             return RedirectToAction(nameof(Mine));
         }
         [HttpGet]

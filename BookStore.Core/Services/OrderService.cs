@@ -59,5 +59,11 @@ namespace BookStore.Core.Services
 
             return orderServiceModels;
         }
+
+        public bool Exist(int bookId, string userId)
+        {
+            return repository.AllReadOnly<Order>()
+                .Any(o => o.BookId == bookId && o.BuyerId == userId);
+        }
     }
 }

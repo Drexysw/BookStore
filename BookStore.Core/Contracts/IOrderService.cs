@@ -12,5 +12,7 @@ namespace BookStore.Core.Contracts
         Task Create(int bookId,string userId);
         Task<IEnumerable<OrderServiceModel>> GetOrders();
 
+        bool Exist(int bookId, string userId);
+
     }
 }
