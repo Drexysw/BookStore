@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BookStore.Core.Contracts.Admin;
+using BookStore.Core.Services.Admin;
 using Moq;
 using BookStore.Infrastructure.Data.Models;
 
@@ -19,11 +20,12 @@ namespace BookStore.Tests.UnitTests
     public class OrderServiceTests
     {
         private IRepository repository;
-        private ILogger<OrderService> logger;
         private IOrderService orderService;
         private IUserService userService;
+        private IAuthorService authorService;
         private ILogger<BookService> bookserviceLogger;
-        private ApplicationDbContext bookDBContext;
+        private ApplicationDbContext bookdbContext;
+        private IBookService bookService;
         [OneTimeSetUp]
         public void Setup()
         {
@@ -31,16 +33,34 @@ namespace BookStore.Tests.UnitTests
                 .UseInMemoryDatabase(databaseName: "ApplicationDbContext" + Guid.NewGuid().ToString())
                 .Options;
 
-            bookDBContext = new ApplicationDbContext(dbContextOptions);
+            bookdbContext = new ApplicationDbContext(dbContextOptions);
 
-            bookDBContext.Database.EnsureCreated();
+            bookdbContext.Database.EnsureCreated();
 
-            SeedDataBase.SeedDatabase(bookDBContext);
+            SeedDataBase.SeedDatabase(bookdbContext);
+        }
+
+        [Test]
+        public async Task TestIfTheOrderExist()
+        {
+            var loggerMockBookService = new Mock<ILogger<BookService>>();
+            bookserviceLogger = loggerMockBookService.Object;
+            repository = new Repository(bookdbContext); 
+            userService = new UserService(repository);
+            authorService = new AuthorService(repository);
+            bookService = new BookService(repository, bookserviceLogger, authorService);
+            orderService = new OrderService(repository, bookService, userService);
+
+
+            var result = await orderService.Exist(1, "fbjfif33-c23-ooo21-sdsk23-a3jfjcj224");
+
+
+            Assert.That(result, Is.True);
         }
         [OneTimeTearDown]
         public void TearDownBase()
         {
-            bookDBContext.Dispose();
+            bookdbContext.Dispose();
         }
     }
 }

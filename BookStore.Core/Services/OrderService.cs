@@ -24,10 +24,6 @@ namespace BookStore.Core.Services
             bookService = _bookService;
             userService = _userService;
         }
-        public OrderService(IRepository _repository)
-        {
-            repository = _repository;
-        }
         public async Task Create(int bookId, string userId)
         {
             Order order = new Order()
@@ -60,10 +56,10 @@ namespace BookStore.Core.Services
             return orderServiceModels;
         }
 
-        public bool Exist(int bookId, string userId)
+        public async Task<bool> Exist(int bookId, string userId)
         {
-            return repository.AllReadOnly<Order>()
-                .Any(o => o.BookId == bookId && o.BuyerId == userId);
+            return await repository.AllReadOnly<Order>()
+                .AnyAsync(o => o.BookId == bookId && o.BuyerId == userId);
         }
     }
 }

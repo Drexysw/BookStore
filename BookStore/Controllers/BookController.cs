@@ -112,7 +112,7 @@ namespace BookStore.Controllers
             }
 
             await bookService.Buy(id, User.Id());
-            if (!orderService.Exist(id, User.Id()))
+            if (!await orderService.Exist(id, User.Id()))
             {
                 await orderService.Create(id, User.Id());
             }

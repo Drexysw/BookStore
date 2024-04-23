@@ -95,6 +95,17 @@ namespace BookStore.Tests.UnitTests
 
         }
 
+        [Test]
+        public async Task TestUserHasBuysTask()
+        {
+            var repo = new Repository(bookdbContext);
+            sellerService = new SellerService(repo);
+
+            var result = await sellerService.UserHasBuys("fbjfif33-c23-ooo21-sdsk23-a3jfjcj224");
+
+            Assert.That(true, Is.EqualTo(result));
+        }
+
         [OneTimeTearDown]
         public void TearDownBase()
         {

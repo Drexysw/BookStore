@@ -44,7 +44,7 @@ namespace BookStore.Core.Services
 
         public async Task<bool> UserHasBuys(string userId)
         {
-            return await repository.All<Book>()
+            return await repository.AllReadOnly<Book>()
                 .AnyAsync(h => h.BuyerId == userId);
         }
 

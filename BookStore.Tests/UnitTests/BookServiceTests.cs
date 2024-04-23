@@ -53,6 +53,7 @@ namespace BookStore.Tests.UnitTests
                 Title = "",
                 ImageUrl = "",
                 Description = "",
+                IsApproved = true,
                 AuthorId = 1
             });
 
@@ -79,8 +80,8 @@ namespace BookStore.Tests.UnitTests
             var authorService = new AuthorService(repo);
             bookservice = new BookService(repo, loggerMock.Object, authorService);
 
-            int count =  bookservice.AllBooksAsync().Result.Count();
-            int result =  repo.AllReadOnly<Book>().Count();
+            var count =  (await bookservice.AllBooksAsync()).Count();
+            var result = await repo.AllReadOnly<Book>().CountAsync();
 
             Assert.That(count, Is.EqualTo(result));
         }
@@ -129,16 +130,17 @@ namespace BookStore.Tests.UnitTests
 
             await repo.AddAsync<Book>(new Book()
             {
-                Id = 2,
+                Id = 17,
                 Title = "Princess",
                 Description = "",
                 ImageUrl = "",
                 AuthorId = 1,
+                IsApproved = true,
                 Price = 20
             });
             await repo.SaveChangesAsync();
 
-            var boardGame = repo.GetByIdAsync<Book>(2);
+            var boardGame = repo.GetByIdAsync<Book>(17);
 
             Assert.That(boardGame.Result.Title, Is.EqualTo("Princess"));
 
@@ -193,6 +195,7 @@ namespace BookStore.Tests.UnitTests
         [Test]
         public async Task TestTakeLastThreeBoardGames()
         {
+            //arrange
             var loggerMock = new Mock<ILogger<BookService>>();
             logger = loggerMock.Object;
             var repo = new Repository(bookdbContext);
@@ -201,14 +204,16 @@ namespace BookStore.Tests.UnitTests
 
             await repo.AddRangeAsync(new List<Book>()
             {
-                new Book() {Id = 2, Title="", Description="", ImageUrl="", AuthorId = 1,IsApproved = true},
-                new Book() {Id = 5, Title="", Description="", ImageUrl="",AuthorId = 1,IsApproved = true},
-                new Book() {Id = 7, Title="", Description="", ImageUrl="", AuthorId = 1,IsApproved = true},
-                new Book() {Id = 3, Title="", Description="", ImageUrl="",AuthorId = 1,IsApproved = true}
+                new Book() {Id = 12, Title="", Description="", ImageUrl="", AuthorId = 1,IsApproved = true},
+                new Book() {Id = 13, Title="", Description="", ImageUrl="",AuthorId = 1,IsApproved = true},
+                new Book() {Id = 14, Title="", Description="", ImageUrl="", AuthorId = 1,IsApproved = true},
+                new Book() {Id = 15, Title="", Description="", ImageUrl="",AuthorId = 1,IsApproved = true}
             });
             await repo.SaveChangesAsync();
-
+            //act
             var boardgamecollection = await bookservice.LastThreeBooksAsync();
+
+            //assert
             Assert.That(3, Is.EqualTo(boardgamecollection.Count()));
         }
         [Test]

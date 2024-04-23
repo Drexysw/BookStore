@@ -58,6 +58,7 @@ namespace BookStore.Infrastructure.Data.Configuration
                 NormalizedUserName = "guestuser@gmail.com",
                 Email = "guestuser@gmail.com",
                 NormalizedEmail = "guestuser@gmail.com",
+                SecurityStamp = "9d7490d5-eff5-4123-994a-2e5a2f8b9a8c",
                 FirstName = "David",
                 LastName = "Davidov"
             };
