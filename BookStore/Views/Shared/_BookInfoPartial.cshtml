@@ -1,0 +1,26 @@
+﻿@model IEnumerable<BooksAllServiceModel>
+@{
+    var books = Model.ToList();
+}
+<style>
+    .card:hover {
+        box-shadow: -1px 9px 40px -12px #808080;
+    }
+</style>
+<div class="row">
+    @for (int i = 0; i < books.Count; i++)
+    {
+        <div class="card" style="width:7cm;margin:12px;">
+            <img src="@books[i].ImageUrl" class=" card-img-top" />
+            <div class=" card-body">
+                <div class="card-title">
+                    <h2>@books[i].Title</h2>
+                </div>
+                <div class="card-text">
+                    <p>Price: @books[i].Price</p>
+                </div>
+                <a class="btn btn-primary" asp-route-id="@books[i].Id" asp-controller="Book" asp-action="Details">Read More</a>
+            </div>
+        </div>
+    }
+</div>

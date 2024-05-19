@@ -1,0 +1,77 @@
+﻿@model IEnumerable<BookServiceModel>
+@{
+    var books = Model.ToList();
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .books-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .book-card {
+        width: 30%;
+        margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .book-thumbnail {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .book-details {
+        padding: 10px;
+    }
+
+        .book-details h2 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .book-details p {
+            margin: 5px 0;
+        }
+
+    .book-card.active {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+</style>
+    <div class="container">
+        <h1>Welcome to Our Bookstore</h1>
+        <h4 class="text-center">This are our last added books! Better have a look.</h4>
+        <div class="books-container">
+            @foreach (var book in books)
+            {
+                <div class="book-card">
+                    <img src="@book.ImageUrl" alt="@book.Title" class="book-thumbnail">
+                    <div class="book-details">
+                        <h2>@book.Title</h2>
+                    <a class="btn btn-primary" asp-controller="Book" asp-action="Details"
+                       asp-route-id="@book.Id" > @book.Title</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
